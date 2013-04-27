@@ -16,7 +16,7 @@ function(expr, typeIfNoOps) {
 
         // Clean within objects
         else if (expr[key] === Object(expr[key])) {
-            expr[key] = clean(expr[key], true);
+            expr[key] = clean(expr[key], !{query:1, $query:1, $orderby:1, sort:1}[key]);
         }
 
         // Convert other values to a string describing their type
