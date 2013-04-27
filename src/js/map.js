@@ -3,8 +3,28 @@ function() {
         // Ignore explained queries
         if (this.query.$explain === true) {
             return;
-        } else if (this.query.$explain === false && this.query.query) {
+        }
+        if (this.query.query) {
             this.query = this.query.query;
+        //} else if (this.query.$query)
+        //    this.query = this.query.$query;
+        }
+    }
+    if (this.op == 'command') {
+        /* count/findAndModify commands looks like:
+            {op: 'command',
+             command: {
+                 count: 'collectionname',
+                 query : {...}
+            }
+        } */
+        for (var op in {count:1, findAndModify:1}) {
+            if (op in this.command) {
+                this.op = op;
+                this.ns = this.command[op];
+                this.query = this.command;
+                break;
+            }
         }
     }
 
